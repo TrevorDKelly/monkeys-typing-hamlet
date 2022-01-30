@@ -1,0 +1,39 @@
+select a monkey
+  inserts it into monkey collection
+    create a monkey
+
+load
+  get all monkeys and stats
+  fill select with monkey names
+
+
+ db
+  monkey
+    id
+    name
+    total presses
+    correct
+    top score
+
+
+start
+  live nums at 0
+  send data
+
+every press
+  update presses on screen
+
+every x presses
+  send data
+  zero out
+
+when new best
+  send data
+
+press
+  update numbers
+  if senddata is at 100
+    send
+    set to 0
+  if new high
+    send

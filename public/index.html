@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Monkeys Typing Hamlet</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </head>
+
+  <body>
+    <script type="text/x-handlebars" id="monkey_template">
+      <div class="monkey-header">
+        <dl class="stats">
+          {{> stats_template}}
+        </dl>
+        <p class="output"></p>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" id="stats_template" data-type="partial">
+        <div class="stat-row">
+          <dt>Name</dt>
+          <dd>{{ name }}</dd>
+        </div>
+        <div class="stat-row">
+          <dt>Best</dt>
+          <dd>{{ fullData.best }}</dd>
+        </div>
+        <div class="stat-row">
+          <dt>Correct Keys</dt>
+          <dd>{{ fullData.correct }}</dd>
+        </div>
+        <div class="stat-row">
+          <dt>Total Keys</dt>
+          <dd>{{ fullData.presses }}</dd>
+        </div>
+    </script>
+
+    <script type="text/x-handlebars" id="leaderboard_template">
+      {{#each monkeys}}
+        <div class="remote-stats">
+          {{> stats_template}}
+        </div>
+      {{/each}}
+    </script>
+
+    <header>
+      <h1>monkeys typing hamlet.</h1>
+      <p>"We've all heard that a million monkeys banging on a million typewriters will eventually reproduce the entire works of Shakespeare. Now, thanks to the Internet, we know this is not true."</p>
+      <p>- Robert Wilensky</p>
+    </header>
+
+    <main>
+      <div class="selector">
+        <form action="/choose" id="picker">
+          <select id="choice" name="monkey">
+            <option value="Josh">Josh</option>
+            <option value="Trevor">Trevor</option>
+            <option value="Wes">Wes</option>
+            <option value="Will">Will</option>
+          </select>
+          <input type="submit" value="Choose Monkey">
+        </form>
+      </div>
+
+      <div class="first-line">First line of Hamlet: "FRANCISCO at his post. Enter to him BERNARDO"</div>
+
+      <div id="leaderboard" class="leaderboard">
+      </div>
+
+      <div id="monkeys" class="monkeys">
+      </div>
+    </main>
+
+    <footer>
+    </footer>
+    <script src="bundle.js" type="module"></script>
+  </body>
+</html>
+

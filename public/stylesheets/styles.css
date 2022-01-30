@@ -1,0 +1,117 @@
+@import "./reset.css";
+
+html {
+  font: 16px sans-serif;
+}
+
+body {
+}
+
+header {
+  background-image: linear-gradient(lightgrey, darkgrey);
+  border-bottom: 5px solid black;
+  padding: 20px;
+  text-align: center;
+}
+
+header p {
+  font: italic 1rem serif;
+  max-width: 800px;
+  margin: auto;
+}
+
+main {
+  padding: 20px;
+}
+
+h1 {
+  font: bold 3rem "Merriweather", serif;
+  margin: 20px;
+}
+
+.selector {
+  display: inline-block;
+  height: 50px;
+}
+
+.first-line {
+  display: inline-block;
+  margin: 5px;
+}
+
+.monkeys {
+  display: flex;
+  gap: 1%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.monkey {
+  border: 1px solid grey;
+  flex: 1 1 auto;
+  padding: 10px;
+  max-width: 1000px;
+  min-width: 400px;
+}
+
+.monkey-header {
+  display: flex;
+  justify-content: space-between;
+  margin: 2%;
+}
+
+.output {
+  background-color: #e8dcb8;
+  box-shadow: inset -0.1em 0.2em 1em grey, -0.1em -0.1em 0.5em lightgrey;
+  display: inline-block;
+  flex: 3;
+  font: bold 1.5rem "Merriweather", serif;
+  margin: 1%;
+  min-height: 20px;
+  padding: 5% 10%;
+}
+
+.stats {
+  border: 1px solid black;
+  display: inline-block;
+  flex: 1;
+  font: 0.7rem sans-serif;
+  margin: 1%;
+  padding: 1%;
+  width: 100%;
+}
+
+.stat-row:nth-child(1) {
+  border-bottom: 1px solid black;
+  font-style:bold;
+}
+
+.stat-row:nth-child(2n) {
+  background-color: lightgrey;
+}
+
+dt, dd {
+  display: inline-block;
+  width: 45%;
+}
+
+dd {
+  text-align: center;
+}
+
+.leaderboard {
+  display: flex;
+}
+
+.remote-stats {
+  border: 1px solid black;
+  display: inline-block;
+  flex: 1;
+  font: 0.7rem sans-serif;
+  margin: 1%;
+  padding: 1%;
+  width: 100%;
+}
+
+

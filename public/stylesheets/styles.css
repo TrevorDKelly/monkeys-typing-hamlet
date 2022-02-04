@@ -5,9 +5,19 @@ html {
 }
 
 body {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "first-line leaderboard"
+    "selector leaderboard"
+    "monkeys   leaderboard"
+    "footer footer";
+  grid-template-columns: auto 200px;
+  grid-template-rows: 150px 50px 50px auto 50px;
 }
 
 header {
+  grid-area: header;
   background-image: linear-gradient(lightgrey, darkgrey);
   border-bottom: 5px solid black;
   padding: 20px;
@@ -20,26 +30,25 @@ header p {
   margin: auto;
 }
 
-main {
-  padding: 20px;
-}
-
 h1 {
-  font: bold 3rem "Merriweather", serif;
-  margin: 20px;
+  font: bold 2.5rem "Merriweather", serif;
+  margin-bottom: 20px;
 }
 
 .selector {
+  grid-area: selector;
   display: inline-block;
   height: 50px;
 }
 
 .first-line {
+  grid-area: first-line;
   display: inline-block;
   margin: 5px;
 }
 
 .monkeys {
+  grid-area: monkeys;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -49,7 +58,10 @@ h1 {
 .monkey {
   border-radius: 2%;
   box-shadow: 0px 4px 10px grey;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
+  justify-content: center;
   padding: 10px;
   margin: 1%;
   max-width: 1000px;
@@ -107,7 +119,10 @@ dd {
 }
 
 .leaderboard {
+  grid-area: leaderboard;
   display: flex;
+  flex-direction: column;
+  margin: 10px;
 }
 
 .remote-stats {

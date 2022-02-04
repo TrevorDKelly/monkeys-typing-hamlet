@@ -44,33 +44,47 @@
       {{/each}}
     </script>
 
+    <script type="text/x-handlebars" id="leaderboards_template">
+      {{each allStats}}
+        <div class="top-scores">
+          <p class="top-score-category">{{category}}</p>
+          <dl>
+            {{each leaders}}
+              <dt>{{rank}}: {{name}}</dt>
+              <dd>{{value}}</dd>
+            {{/each}}
+          </dl>
+        </div>
+      {{/each}}
+    </script>
+
+    [
+      {category: "",
+       leaders: [{rank: 1, value: ""}, ...],
+      }
+    ]
+
     <header>
       <h1>monkeys typing hamlet.</h1>
       <p>"We've all heard that a million monkeys banging on a million typewriters will eventually reproduce the entire works of Shakespeare. Now, thanks to the Internet, we know this is not true."</p>
       <p>- Robert Wilensky</p>
     </header>
 
-    <main>
-      <div class="selector">
-        <form action="/choose" id="picker">
-          <select id="choice" name="monkey">
-            <option value="Josh">Josh</option>
-            <option value="Trevor">Trevor</option>
-            <option value="Wes">Wes</option>
-            <option value="Will">Will</option>
-          </select>
-          <input type="submit" value="Choose Monkey">
-        </form>
-      </div>
+    <div id="leaderboard" class="leaderboard">
+    </div>
 
-      <div class="first-line">First line of Hamlet: "FRANCISCO at his post. Enter to him BERNARDO"</div>
+    <div class="selector">
+      <form action="/choose" id="picker">
+        <input name="monkey" list="choice">
+        <datalist id="choice">
+        </datalist>
+        <input type="submit" value="Choose Monkey">
+      </form>
+    </div>
 
-      <div id="leaderboard" class="leaderboard">
-      </div>
-
-      <div id="monkeys" class="monkeys">
-      </div>
-    </main>
+    <div class="first-line">First line of Hamlet: "FRANCISCO at his post. Enter to him BERNARDO"</div>
+    <div id="monkeys" class="monkeys">
+    </div>
 
     <footer>
     </footer>

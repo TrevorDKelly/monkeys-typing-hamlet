@@ -13,7 +13,10 @@
         <dl class="stats">
           {{> stats_template}}
         </dl>
-        <p class="output"></p>
+        <div class="output-container">
+          <p class="output">
+          </p>
+        </div>
       </div>
     </script>
 
@@ -57,12 +60,6 @@
         </div>
       {{/each}}
     </script>
-
-    [
-      {category: "",
-       leaders: [{rank: 1, value: ""}, ...],
-      }
-    ]
 
     <header>
       <h1>monkeys typing hamlet.</h1>

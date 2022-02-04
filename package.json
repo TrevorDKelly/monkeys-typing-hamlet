@@ -16,7 +16,7 @@
     "dom-keyboard": "^0.1.2",
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
-    "mongodb": "^4.3.1",
+    "mongodb": "^4.3.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",

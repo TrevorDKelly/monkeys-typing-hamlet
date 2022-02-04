@@ -1,19 +1,22 @@
 import DOMKeyboard from "dom-keyboard";
 import Templates from "../utils/templates.mjs";
 
-function Monkey(name, id, node) {
+const DB_LOCATION = "http://localhost:3001/"
+
+function Monkey(name, node) {
   this.name = name;
-  this.id = id;
   this.hamletIndex = 0;
   this.fullData = {
     presses: 0,
     correct: 0,
-    best: 0,
+    best: "",
+    hits: {},
   };
   this.sendData = {
     presses: 0,
     correct: 0,
-    best: 0,
+    best: "",
+    hits: {},
   };
   buildMonkeyNode.call(this, node, name);
 }
@@ -32,17 +35,28 @@ Monkey.prototype = {
 
   checkHamlet(letter) {
     if (isHamlet.call(this, letter)) {
-      this.fullData.correct += 1;
-      this.sendData.correct += 1;
       this.hamletIndex += 1;
-      if (!this.fullData.best || this.hamletIndex > this.fullData.best.length) {
-        this.fullData.best = HAMLET.slice(0, this.hamletIndex);
-        this.sendData.best = this.hamletIndex;
+      const hamletSlice = HAMLET.slice(0, this.hamletIndex);
+      this.updateCorrect(hamletSlice);
+      if (this.hamletIndex > this.fullData.best.length) {
+        this.fullData.best = hamletSlice
+        this.sendData.best = hamletSlice;
       }
     } else {
       this.hamletIndex = 0;
       this.output.innerHTML = "";
     }
+  },
+
+  updateCorrect(hamletSlice) {
+    this.fullData.correct += 1;
+    this.sendData.correct += 1;
+
+    this.fullData.hits[hamletSlice] ||= 0;
+    this.fullData.hits[hamletSlice] += 1;
+
+    this.sendData.hits[hamletSlice] ||= 0;
+    this.sendData.hits[hamletSlice] += 1;
   },
 
   run() {
@@ -61,18 +75,19 @@ Monkey.prototype = {
 
   send() {
     const req = new XMLHttpRequest();
-    req.open("POST", `http://localhost:3001/${this.id}`);
+    req.open("POST", DB_LOCATION + `update/${this.name}`);
     req.setRequestHeader("Content-Type", "application/json");
 
-    const data = { ...this.sendData, id: this.id };
-
-    req.send(JSON.stringify(data));
+    const data = { ...this.sendData, name: this.name };
     this.sendData = {
       ...this.sendData,
       presses: 0,
       correct: 0,
+      hits: {},
     }
-  }
+
+    req.send(JSON.stringify(data));
+  },
 }
 
 function isHamlet(letter) {
@@ -86,11 +101,12 @@ function isHamlet(letter) {
 
 function buildMonkeyNode(node, name) {
   this.node = node;
-  this.keyboard = new DOMKeyboard("100%", `${name}-keyboard`);
+  this.keyboard = new DOMKeyboard("95%", `${name}-keyboard`);
 
   this.node.innerHTML = Templates.monkey(this);
   this.output = this.node.getElementsByClassName("output")[0];
   this.stats = this.node.getElementsByClassName("stats")[0];
+
   this.node.appendChild(this.keyboard.node);
   this.node.classList.add("monkey");
 }

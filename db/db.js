@@ -1,50 +1,86 @@
 const express = require("express");
 const app = express();
-const { Pool } = require("pg");
+const MongoClient = require("mongodb").MongoClient;
 const cors = require("cors");
 require('dotenv').config();
 
 app.use(express.json());
 app.use(cors());
 
-const pool = new Pool({
-  port: process.env.DBPORT,
-  host: process.env.DBHOST,
-  database: process.env.DATABASE,
-  user: "test",
-  password: process.env.DBPASSWORD,
-});
+client = new MongoClient(process.env.DB_LOCAL);
 
 app.get("/", async (req, res) => {
-  const query = "SELECT * FROM monkeys;";
-
-  let client;
   try {
-    client = await pool.connect();
-    const answer = await client.query(query);
-    res.status(200).json(answer.rows)
-    client.release();
+    await client.connect();
+    const db = client.db("monkeys");
+    const collection = db.collection("monkeys");
+    const answer = await collection.find().toArray();
+
+    res.status(200).json(answer)
   } catch (e) {
     res.status(400).json({error: e.message});
-    client.release();
+  } finally {
+    await client.close();
   }
 });
 
-app.post("/:id", async (req, res) => {
-  const query = "UPDATE monkeys SET presses = presses + $1, correct = correct + $2, best = GREATEST(best, $3) WHERE id = $4"
-  let data = [req.body.presses, req.body.correct, req.body.best, req.params.id];
-  data = data.map(val => parseInt(val, 10));
-
-  let client;
+app.post("/update/:name", async (req, res) => {
   try {
-    client = await pool.connect();
-    const answer = await client.query(query, data);
-    res.status(204).send();
-    client.release();
+    await client.connect();
+    const db = client.db("monkeys");
+    const collection = db.collection("monkeys");
+
+    const increments = {
+      presses: req.body.presses,
+      correct: req.body.correct,
+    };
+
+    Object.keys(req.body.hits).forEach( reach => {
+      increments[`hits.${reach}`] = req.body.hits[reach];
+    });
+
+    const answer = await collection.updateOne(
+      { name: req.params.name },
+      {
+        $inc: increments,
+        $max: {
+          best: req.body.best,
+        }
+    });
+
+    res.status(200).send();
   } catch (e) {
     res.status(400).json({error: e.message});
-    client.release();
+  } finally {
+    await client.close();
   }
 });
 
-app.listen(3001,  () => console.log(`listening on port ${process.env.DBPORT}`));
+app.post("/new", async (req, res) => {
+  try {
+    await client.connect();
+    const db = client.db("monkeys");
+    const collection = db.collection("monkeys");
+
+    const answer = await collection.insertOne({name: req.body.name})
+    res.status(200).send();
+  } catch (e) {
+    res.status(400).send();
+  } finally {
+    await client.close();
+  }
+});
+
+/*
+return leaders
+[
+  {
+    category: "",
+    leaders: [{rank: 1, value: ""}, ...],
+  }
+]
+*/
+
+
+
+app.listen(3001,  () => console.log(`listening on port 3001`));

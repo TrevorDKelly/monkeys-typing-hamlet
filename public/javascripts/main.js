@@ -1,21 +1,52 @@
 import Monkey from "./modules/monkey.mjs";
 import Templates from "./utils/templates.mjs";
 
+const DB_URL = "http://localhost:3001";
+const LEADERBOARD_REFRESH_TIME = 15000;
+
 document.addEventListener("DOMContentLoaded", () => {
-  updateLeaderboard();
-  setInterval(() => updateLeaderboard(), 30000);
+  initialPageLoad();
+  setInterval(() => updateLeaderboard(), LEADERBOARD_REFRESH_TIME);
   const form = document.getElementById("picker");
-  const select = document.getElementById("choice");
+  const dataList = document.getElementById("choice");
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    addMonkey(select.value);
+    addMonkey(form.firstElementChild.value);
   });
 });
 
+function initialPageLoad() {
+  getAllData()
+    .then(monkeys => {
+      const leaderboard = document.getElementById("leaderboard");
+      const names = [];
+      monkeys = monkeys.map(monkey => {
+        names.push(monkey.name);
+        return toTemplateFormat(monkey);
+      });
+      leaderboard.innerHTML = Templates.leaderboard({ monkeys });
+      fillSelect(names);
+    })
+}
+
+function fillSelect(names) {
+  const dataList = document.getElementById("choice");
+  names.forEach(name => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.innerHTML = name;
+    dataList.appendChild(opt);
+  });
+}
+
+function getAllData() {
+  return fetch(DB_URL)
+          .then(answer => answer.json());
+}
+
 function updateLeaderboard() {
-  fetch("http://localhost:3001")
-    .then(res => res.json())
+  getAllData()
     .then(monkeys => {
       const leaderboard = document.getElementById("leaderboard");
 
@@ -31,7 +62,7 @@ function toTemplateFormat({ name, presses, correct, best })  {
     fullData: {
       presses,
       correct,
-      best: HAMLET.slice(0, best),
+      best,
     },
   };
 }
@@ -40,7 +71,7 @@ function addMonkey(name) {
   const monkeys = document.getElementById("monkeys");
 
   const node = document.createElement("div");
-  const monkey = new Monkey(name, IDs[name], node);
+  const monkey = new Monkey(name, node);
 
   monkeys.appendChild(monkey.node);
   monkey.run();

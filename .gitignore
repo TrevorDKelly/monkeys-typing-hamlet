@@ -1,5 +1,8 @@
 node_modules
 *.swp
 .env
-notes
-
+notes.txt
+test.mjs
+test.js
+bundle.js
+package-lock.json

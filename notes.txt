@@ -37,3 +37,22 @@ press
     set to 0
   if new high
     send
+
+track times to
+  f
+  fr
+  fra
+  fran
+
+  reach hash
+    + 1 or is 1
+
+
+db
+  index names
+
+cache
+  top 10
+    presses
+    correct
+    score
